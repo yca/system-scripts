@@ -1,0 +1,114 @@
+#!/usr/local/bin/qtshell
+
+
+static QStringList findSourceFiles(QString target)
+{
+	QDir d(target);
+	QStringList dirs = d.entryList(QStringList(), QDir::NoDotAndDotDot | QDir::AllDirs);
+	QStringList files;
+	QStringList lfiles = d.entryList(QStringList() << "*.cpp" << "*.h", QDir::NoDotAndDotDot | QDir::Files);
+	foreach (const QString &file, lfiles)
+		files << d.absoluteFilePath(file);
+	foreach (const QString &dir, dirs)
+		files << findSourceFiles(d.absoluteFilePath(dir));
+	return files;
+}
+
+QStringList importFile(QString filename)
+{
+	QFile f(filename);
+	if (!f.open(QIODevice::ReadOnly))
+		return QStringList();
+	return QString::fromUtf8(f.readAll()).split("\n");
+}
+
+QStringList findLatexProperties(QString filename)
+{
+	QFile f(filename);
+	if (!f.open(QIODevice::ReadOnly))
+		return QStringList();
+	QStringList lines = QString::fromUtf8(f.readAll()).split("\n");
+	QStringList props;
+	foreach (QString line, lines) {
+		if (!line.startsWith("\\textbf{"))
+			continue;
+		props << line.trimmed();
+	}
+	return props;
+}
+
+void scrmain()
+{
+	__init();
+
+	QStringList diffProps;
+	bool latex = false;
+	bool diff = false;
+	bool showInit = false;
+	QString target = __arguments__[2];
+	if (__arguments__.contains("--help")) {
+		qDebug("exportsettings.qsh target-path [--latex] [--diff filename]");
+		qDebug("\t--latex: Force latex style header output.");
+		qDebug("\t--diff: Print only differences between given latex file, forces --latex.");
+		qDebug("\t--show-init: Print only un-initialized settings.");
+		return;
+	}
+	if (__arguments__.contains("--latex"))
+		latex = true;
+	if (__arguments__.contains("--diff")) {
+		latex = true;
+		int ind = __arguments__.indexOf("--diff");
+		QString diffFile = __arguments__[ind + 1];
+		diffProps = findLatexProperties(diffFile);
+		diff = true;
+	}
+	if (__arguments__.contains("--show-init"))
+		showInit = true;
+	QStringList files =findSourceFiles(target);
+	QStringList gets, sets, defaults;
+	bool defaultsContext = false;
+	foreach (const QString &file, files) {
+		QStringList lines = importFile(file);
+		foreach (QString line, lines) {
+			if (line.contains(" gs(\""))
+				gets << line.split(" gs(\"")[1].split("\"")[0];
+			if (line.contains(" gs(QString(\""))
+				gets << line.split(" gs(QString(\"")[1].split("\"")[0];
+			if (line.contains("ss(\""))
+				sets << line.split("ss(\"")[1].split("\"")[0];
+			if (line.contains("ss(\"") && defaultsContext)
+				defaults << line.split("ss(\"")[1].split("\"")[0];
+			if (line.contains("ss(QString(\""))
+				sets << line.split("ss(QString(\"")[1].split("\"")[0];
+			if (line.contains("if (equals("))
+				gets << line.split("if (equals(")[1].remove("\"").remove("(").remove(")").remove("{").trimmed();
+			if (line.contains("if (starts("))
+				gets << line.split("if (starts(")[1].remove("\"").remove("(").remove(")").remove("{").trimmed();
+			if (line.contains("static void setupDefaults"))
+				defaultsContext = true;
+			if (defaultsContext && line == "}")
+				defaultsContext = false;
+		}
+	}
+	QStringList all;
+	all << gets;
+	all << sets;
+	all.removeDuplicates();
+	qSort(all.begin(), all.end());
+	foreach (QString s, all) {
+		if (latex) {
+			s.replace("_", "\\_")
+				.replace("%", "\\%")
+				.append("} \\\\").prepend("\\textbf{");
+			if (diff == false || !diffProps.contains(s))
+				qDebug("%s", qPrintable(s));
+		} else if (showInit) {
+			if (s.endsWith(".")
+				|| s.contains("%"))
+				continue;
+			if (!defaults.contains(s))
+				qDebug("%s", qPrintable(s));
+		} else
+			qDebug("%s", qPrintable(s));
+	}
+}
