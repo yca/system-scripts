@@ -122,11 +122,11 @@ function qtc_open_session()
 	xdotool key 'alt+s'
 }
 
-function qtc_clean_and_open()
+function qtc_clean_and_open_arm()
 {
 	#close all instances of qt creator, open a new one and select utest session
 	window_close_all "Qt Creator"
-	qtcreator &
+	( source /usr/local/angstrom/arm/environment-setup ; qtcreator & )
 	sleep 2
 	qtc=$(find_window "Qt Creator")
 	qtc_open_session $qtc $1
@@ -151,7 +151,7 @@ then
 
 	konsole_clean_and_open "/home/caglar/myfs/source-codes/bilkon/UTestUi/" "/home/caglar/myfs/source-codes/bilkon/build_dm6446/utestui" "/home/caglar/myfs/temp"
 	chrome_show_bookmarks "146"
-	qtc_clean_and_open "utest"
+	qtc_clean_and_open_arm "utest"
 	dolphin_clean_and_open \
 		"/home/caglar/myfs/source-codes/bilkon/UTestUi/" \
 		"/home/caglar/myfs/source-codes/bilkon/build_dm6446/utestui/" \
@@ -164,8 +164,20 @@ then
 elif [[ "$1" == "oper" ]]
 then
 	echo "restoring operec workspace"
+elif [[ "$1" == "DM6446-Qt-Creator" ]]
+then
+	( source /usr/local/angstrom/arm/environment-setup ; /home/caglar/myfs/tasks/qtcreator/qt-creator-build/bin/qtcreator & )
+elif [[ "$1" == "DM365-Qt-Creator" ]]
+then
+	( source /home/caglar/myfs/tasks/aselsan/vk/bsp/install/linux-devkit/environment-setup ; /home/caglar/myfs/tasks/qtcreator/qt-creator-build/bin/qtcreator & )
+elif [[ "$1" == "Poky-Qt-Creator" ]]
+then
+	( source /home/caglar/myfs/tasks/aselsan/vk/bsp/install_poky/environment-setup-armv5te-poky-linux-gnueabi ; /home/caglar/myfs/tasks/qtcreator/qt-creator-build/bin/qtcreator & )
+elif [[ "$1" == "x86-Qt-Creator" ]]
+then
+	/home/caglar/myfs/tasks/qtcreator/qt-creator-build/bin/qtcreator &
 else
-	sel=$(kdialog --title "Select your destiny" --combobox "Select your session:" "utest" "aselsan" "operec")
+	sel=$(kdialog --title "Select your destiny" --combobox "Select your session:" "utest" "aselsan" "operec" "DM6446-Qt-Creator" "DM365-Qt-Creator" "Poky-Qt-Creator" "x86-Qt-Creator")
 	if [[ "$sel" != "" ]]
 	then
 		$0 $sel
