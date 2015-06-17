@@ -6,6 +6,10 @@ echo 'SOURCES += \' > ${PRO}
 find . -iname "*.c" -printf "\t%p \\\ \n" >> ${PRO}
 echo "" >> ${PRO}
 
+echo 'SOURCES += \' >> ${PRO}
+find . -iname "*.cpp" -printf "\t%p \\\ \n" >> ${PRO}
+echo "" >> ${PRO}
+
 echo 'HEADERS += \' >> ${PRO}
 find . -iname "*.h" -printf "\t%p \\\ \n" >> ${PRO}
 echo "" >> ${PRO}
