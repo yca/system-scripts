@@ -169,15 +169,21 @@ then
 	( source /usr/local/angstrom/arm/environment-setup ; /home/caglar/myfs/tasks/qtcreator/qt-creator-build/bin/qtcreator & )
 elif [[ "$1" == "DM365-Qt-Creator" ]]
 then
-	( source /home/caglar/myfs/tasks/aselsan/vk/bsp/install/linux-devkit/environment-setup ; /home/caglar/myfs/tasks/qtcreator/qt-creator-build/bin/qtcreator & )
+	( source /home/caglar/myfs/tasks/aselsan/vk/bsp/install/linux-devkit/environment-setup ; rm /linux-devkit ; ln -s /home/caglar/myfs/tasks/aselsan/vk/bsp/install/linux-devkit/ /linux-devkit ; /home/caglar/myfs/tasks/qtcreator/qt-creator-build/bin/qtcreator & )
+elif [[ "$1" == "DM385-Qt-Creator" ]]
+then
+	( source /home/caglar/myfs/tasks/aselsan/vk/dm385/GA_Release_3.8.0/install/IPNC_RDK_V3.8.0/Source/ti_tools/linux_devkit/environment-setup ; kdesu rm /linux-devkit ; kdesu ln -s /home/caglar/myfs/tasks/aselsan/vk/dm385/GA_Release_3.8.0/install/IPNC_RDK_V3.8.0/Source/ti_tools/linux_devkit /linux-devkit ; /home/caglar/myfs/tasks/qtcreator/qt-creator-build/bin/qtcreator & )
 elif [[ "$1" == "Poky-Qt-Creator" ]]
 then
 	( source /home/caglar/myfs/tasks/aselsan/vk/bsp/install_poky/environment-setup-armv5te-poky-linux-gnueabi ; /home/caglar/myfs/tasks/qtcreator/qt-creator-build/bin/qtcreator & )
 elif [[ "$1" == "x86-Qt-Creator" ]]
 then
 	/home/caglar/myfs/tasks/qtcreator/qt-creator-build/bin/qtcreator &
+elif [[ "$1" == "Zynq-Qt-Creator" ]]
+then
+	( source /home/caglar/myfs/tasks/zybo/oesdk/environment-setup-cortexa9-vfp-neon-oe-linux-gnueabi ; /home/caglar/myfs/tasks/qtcreator/qt-creator-build/bin/qtcreator & )
 else
-	sel=$(kdialog --title "Select your destiny" --combobox "Select your session:" "utest" "aselsan" "operec" "DM6446-Qt-Creator" "DM365-Qt-Creator" "Poky-Qt-Creator" "x86-Qt-Creator")
+	sel=$(kdialog --title "Select your destiny" --combobox "Select your session:" "utest" "aselsan" "operec" "DM6446-Qt-Creator" "DM365-Qt-Creator" "DM385-Qt-Creator" "Poky-Qt-Creator" "x86-Qt-Creator" "Zynq-Qt-Creator")
 	if [[ "$sel" != "" ]]
 	then
 		$0 $sel
