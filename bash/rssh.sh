@@ -4,7 +4,7 @@ ip=$1
 
 if [[ "ip" == "" ]]
 then
-	ip=196
+	ip=192.168.1.196
 fi
 
-ssh-keygen -f "/home/caglar/.ssh/known_hosts" -R 192.168.1.$ip
+ssh-keygen -f "$HOME/.ssh/known_hosts" -R $ip

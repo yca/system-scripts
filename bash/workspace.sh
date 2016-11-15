@@ -166,10 +166,10 @@ then
 	echo "restoring operec workspace"
 elif [[ "$1" == "DM6446-Qt-Creator" ]]
 then
-	( source /usr/local/angstrom/arm/environment-setup ; /home/caglar/myfs/tasks/qtcreator/qt-creator-build/bin/qtcreator & )
+	( source /usr/local/angstrom/arm/environment-setup ; qtcreator & )
 elif [[ "$1" == "DM365-Qt-Creator" ]]
 then
-	( source /home/caglar/myfs/tasks/aselsan/vk/bsp/install/linux-devkit/environment-setup ; rm /linux-devkit ; ln -s /home/caglar/myfs/tasks/aselsan/vk/bsp/install/linux-devkit/ /linux-devkit ; /home/caglar/myfs/tasks/qtcreator/qt-creator-build/bin/qtcreator & )
+	( source /home/amenmd/myfs/tasks/aselsan/vk/bsp/install/linux-devkit/environment-setup ; qtcreator & )
 elif [[ "$1" == "DM385-Qt-Creator" ]]
 then
 	( source /home/caglar/myfs/tasks/aselsan/vk/dm385/GA_Release_3.8.0/install/IPNC_RDK_V3.8.0/Source/ti_tools/linux_devkit/environment-setup ; kdesu rm /linux-devkit ; kdesu ln -s /home/caglar/myfs/tasks/aselsan/vk/dm385/GA_Release_3.8.0/install/IPNC_RDK_V3.8.0/Source/ti_tools/linux_devkit /linux-devkit ; /home/caglar/myfs/tasks/qtcreator/qt-creator-build/bin/qtcreator & )
