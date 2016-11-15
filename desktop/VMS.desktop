@@ -1,0 +1,20 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Comment[en_US]=
+Comment=
+Exec=konsole --geometry 640x480 --nofork -e /home/amenmd/Documents/startvms.sh
+GenericName[en_US]=
+GenericName=
+Icon=/home/amenmd/Documents/vms.png
+MimeType=
+Name[en_US]=DeepVMS
+Name=DeepVMS
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username= 

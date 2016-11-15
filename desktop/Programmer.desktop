@@ -1,0 +1,20 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Comment[en_US]=
+Comment=
+Exec=/home/amenmd/myfs/source-codes/bilkon/build/DeepVMS/EncoderProgrammer/EncoderProgrammer
+GenericName[en_US]=
+GenericName=
+Icon=/home/amenmd/Documents/programmer.png
+MimeType=
+Name[en_US]=Encoder Programmer
+Name=Encoder Programmer
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username= 
